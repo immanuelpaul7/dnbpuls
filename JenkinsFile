@@ -14,7 +14,7 @@ pipFunc() {
     stage('test') {
         snDevOpsStep (stepSysId:'272e9a86dbb373003e87f5861d961965')
         printBuildinfo {
-        	name = "Testing...."
+        	name = "Testing....."
         }
         withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
         	sh 'mvn test -Dpublish'
