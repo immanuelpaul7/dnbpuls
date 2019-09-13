@@ -3,7 +3,7 @@ pipFunc() {
     git 'http://snowdevops@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
     def mvn_version = 'Maven'
     stage('compile') {
-        snDevOpsStep (stepSysId:'a72e5a86dbb373003e87f5861d9619e8')
+        snDevOpsStep (stepSysId:'28099226533733007109ddeeff7b1264')
         printBuildinfo {
         	name = "Compiling..."
         }
@@ -12,7 +12,7 @@ pipFunc() {
 		}
     }
     stage('test') {
-        snDevOpsStep (stepSysId:'272e9a86dbb373003e87f5861d961965')
+        snDevOpsStep (stepSysId:'24099226533733007109ddeeff7b1264')
         printBuildinfo {
         	name = "Testing....."
         }
@@ -22,7 +22,7 @@ pipFunc() {
         junit '**/target/surefire-reports/*.xml'
     }
     stage('package') {
-        snDevOpsStep (stepSysId:'ab2e9a86dbb373003e87f5861d961965')
+        snDevOpsStep (stepSysId:'1c099226533733007109ddeeff7b1263')
         printBuildinfo {
         	name = "Packaging...."
         }
@@ -32,13 +32,13 @@ pipFunc() {
         deploy()
     }
     stage('docker build') {
-        snDevOpsStep (stepSysId:'a72e9a86dbb373003e87f5861d961965')
+        snDevOpsStep (stepSysId:'a4099226533733007109ddeeff7b1264')
         printBuildinfo {
         	name = "Docker build...."
         }
     }
     stage('deploy') {
-        snDevOpsStep (stepSysId:'2b2e9a86dbb373003e87f5861d961965')
+        snDevOpsStep (stepSysId:'a8099226533733007109ddeeff7b1264')
         snDevOpsChange()
         printBuildinfo {
              name = "Deploying...."
