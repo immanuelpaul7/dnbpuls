@@ -1,6 +1,6 @@
 @Library('shared-lib')_
 pipFunc() {
-    git 'http://admin@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
+    git 'http://snowdevops@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
     def mvn_version = 'Maven'
     stage('compile') {
         snDevOpsStep (stepSysId:'a72e5a86dbb373003e87f5861d9619e8')
