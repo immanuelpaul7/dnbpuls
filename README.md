@@ -25,7 +25,7 @@ Copy the id of sa-logic container and execute:
 
 The Containers IP address is found under the property NetworkSettings.IPAddress, use it in the RUN command.
 
-#### Docker Machine on a VM 
+#### Docker Machine on a VM ##
 Get Docker Machine IP by executing:
 
 ` $ docker-machine ip `
@@ -33,5 +33,5 @@ Get Docker Machine IP by executing:
 Use this one in the command.
 
 
-## Pushing the container ##
+### Pushing the container ##
 ` $ docker push $DOCKER_USER_ID/sentiment-analysis-web-app `
