@@ -18,7 +18,8 @@ pipFunc() {
     }
     stage('test') {
      
-	snDevOpsStep ("${env.TEST_STEPSYSID}")
+	//snDevOpsStep ("${env.TEST_STEPSYSID}")
+	    snDevOpsStep ()
         printBuildinfo {
         	name = "Testing....."
         }
