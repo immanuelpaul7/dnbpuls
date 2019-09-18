@@ -7,7 +7,7 @@ pipFunc() {
              env.COMPILE_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
 	     env.TEST_STEPSYSID = 'e480283b533733007109ddeeff7b1241'
         }
-        snDevOpsStep ('${env.COMPILE_STEPSYSID}')
+        snDevOpsStep ("${env.COMPILE_STEPSYSID}")
         snDevOpsChange()
         printBuildinfo {
         	name = "Compiling..."
@@ -18,7 +18,7 @@ pipFunc() {
     }
     stage('test') {
      
-	snDevOpsStep ('${env.TEST_STEPSYSID}')
+	snDevOpsStep ("${env.TEST_STEPSYSID}")
         printBuildinfo {
         	name = "Testing....."
         }
