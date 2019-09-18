@@ -3,7 +3,10 @@ pipFunc() {
     git 'http://snowdevops@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
     def mvn_version = 'Maven'
     stage('compile') {
-        snDevOpsStep (stepSysId:'6480283b533733007109ddeeff7b1241')
+	script {
+                    env.COMPILE_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
+        }
+        snDevOpsStep (stepSysId:${env.COMPILE_STEPSYSID})
         snDevOpsChange()
         printBuildinfo {
         	name = "Compiling..."
