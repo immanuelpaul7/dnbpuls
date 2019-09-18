@@ -4,7 +4,8 @@ pipFunc() {
     def mvn_version = 'Maven'
     stage('compile') {
 	script {
-                    env.COMPILE_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
+             env.COMPILE_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
+	     env.TEST_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
         }
         snDevOpsStep (stepSysId:${env.COMPILE_STEPSYSID})
         snDevOpsChange()
@@ -16,7 +17,8 @@ pipFunc() {
 		}
     }
     stage('test') {
-        snDevOpsStep (stepSysId:'e480283b533733007109ddeeff7b1241')
+        //snDevOpsStep (stepSysId:'e480283b533733007109ddeeff7b1241')
+	    snDevOpsStep (stepSysId:${env.TEST_STEPSYSID})
         printBuildinfo {
         	name = "Testing....."
         }
