@@ -4,7 +4,7 @@ pipFunc() {
     def mvn_version = 'Maven'
     stage('compile') {
 	script {
-             env.COMPILE_STEPSYSID = 'rf302607b533733007109ddeeff7b1218'
+             env.COMPILE_STEPSYSID = '6480283b533733007109ddeeff7b1241'
 	     env.TEST_STEPSYSID = 'e480283b533733007109ddeeff7b1241'
         }
         snDevOpsStep ("${env.COMPILE_STEPSYSID}")
