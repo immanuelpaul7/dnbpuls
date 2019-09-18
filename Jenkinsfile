@@ -8,7 +8,7 @@ pipFunc() {
 	     env.TEST_STEPSYSID = 'e480283b533733007109ddeeff7b1241'
         }
         //snDevOpsStep ("${env.COMPILE_STEPSYSID}")
-	snDevOpsStep(stepSysId:)
+	snDevOpsStep()
         //snDevOpsChange()
         printBuildinfo {
         	name = "Compiling..."
