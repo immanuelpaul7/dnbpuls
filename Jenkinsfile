@@ -40,25 +40,26 @@ pipFunc() {
         }
         //deploy()
     }
-    stage('deploy to dev') {
-	when {
-            branch 'dev'
-        }      
-        snDevOpsStep ()
-        printBuildinfo {
-        	name = "Docker build...."
-        }
+    if (env.BRANCH_NAME == "dev") {   
+    	stage('deploy to dev') {   
+		snDevOpsStep ()
+		printBuildinfo {
+			name = "Docker build...."
+		}
+    	}
     }
-    stage('deploy to prod') {
-	when {
-            branch 'master'
-        }    
-        snDevOpsStep ()
-        snDevOpsChange()
-        printBuildinfo {
-             name = "Deploying...."
-        }
-	checkStatus()
+    if (env.BRANCH_NAME == "prod") { 	
+    	stage('deploy to prod') {
+		when {
+		    branch 'master'
+		}    
+		snDevOpsStep ()
+		snDevOpsChange()
+		printBuildinfo {
+		     name = "Deploying...."
+		}
+		checkStatus()
+    	}
     }
 }
 
