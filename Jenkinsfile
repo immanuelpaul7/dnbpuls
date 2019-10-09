@@ -48,7 +48,7 @@ pipFunc() {
 		}
     	}
     }
-    if (env.BRANCH_NAME == "prod") { 	
+    if (env.BRANCH_NAME == "master") { 	
     	stage('deploy to prod') {
 		when {
 		    branch 'master'
