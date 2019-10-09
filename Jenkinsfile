@@ -49,10 +49,7 @@ pipFunc() {
     	}
     }
     if (env.BRANCH_NAME == "master") { 	
-    	stage('deploy to prod') {
-		when {
-		    branch 'master'
-		}    
+    	stage('deploy to prod') {   
 		snDevOpsStep ()
 		snDevOpsChange()
 		printBuildinfo {
