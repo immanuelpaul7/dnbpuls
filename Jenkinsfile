@@ -38,21 +38,27 @@ pipFunc() {
         withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
 		sh 'mvn package -Dmaven.test.skip=true --batch-mode'
         }
-        deploy()
+        //deploy()
     }
-    stage('docker build') {
+    stage('deploy to dev') {
+	when {
+            branch 'dev'
+        }      
         snDevOpsStep ()
         printBuildinfo {
         	name = "Docker build...."
         }
     }
-    stage('deploy') {
+    stage('deploy to prod') {
+	when {
+            branch 'master'
+        }    
         snDevOpsStep ()
         snDevOpsChange()
         printBuildinfo {
              name = "Deploying...."
         }
-		checkStatus()
+	checkStatus()
     }
 }
 
