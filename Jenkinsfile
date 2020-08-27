@@ -1,4 +1,4 @@
-@Library('shared-lib')_
+
 pipFunc() {
    // git 'http://snowdevops@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
     git 'https://snowdevops@github.com/SealTeam79/dnbpuls.git'
