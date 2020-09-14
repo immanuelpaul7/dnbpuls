@@ -1,60 +1,137 @@
-pipFunc() {
-   // git 'http://snowdevops@dnbpuls.sndevops.net:81/scm/dnbpul/dnb-web.git'
-    git 'https://snowdevops@github.com/SealTeam79/dnbpuls.git'
-    def mvn_version = 'Maven'
-    stage('compile') {
-	/*script {
-             env.COMPILE_STEPSYSID = '6480283b533733007109ddeeff7b1241'
-	     env.TEST_STEPSYSID = 'e480283b533733007109ddeeff7b1241'
-        }*/
-        //snDevOpsStep ("${env.COMPILE_STEPSYSID}")
-	snDevOpsStep()
-        //snDevOpsChange()
-        printBuildinfo {
-        	name = "Compiling..."
+pipeline {
+  agent {
+      label 'master'
+  }
+  stages {
+      //This is a top level stage. When you setup your pipeline on the SN instance
+      //the stage name 'DevATF' here needs to match the Orchestration stage field
+      //on the Steps record. you can find the Orchestration stage field by going to
+      //the SN instance, Devops-> App & Pipelines -> Apps, open your app, it's under
+      //the Steps related list
+      stage('master') {
+        //this specifies that this stage will be triggered on event from dev branch
+        when {
+          branch 'dev'
         }
-        withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
-        	sh 'mvn clean install -DskipTests'
-		}
-    }
-    stage('test') {
-     
-	//snDevOpsStep (stepSysId:"${env.TEST_STEPSYSID}")
-	snDevOpsStep()    
-        printBuildinfo {
-        	name = "Testing....."
+        steps {
+          snDevOpsStep()
+          echo "Compiling..."
         }
-        withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
-        	sh 'mvn test -Dpublish'
+      }
+
+      //This is a top level stage.  When you setup your pipeline on the SN instance
+      //the stage name 'DevHealthScan' here needs to match the Orchestration stage field
+      //on the Steps record. you can find the Orchestration stage field by going to
+      //the SN instance, Devops-> App & Pipelines -> Apps, open your app, it's under
+      //the Steps related list
+      stage('dev') {
+        //this specifies that this stage will be triggered on event from dev branch
+        when {
+          branch 'dev'
         }
-        junit '**/target/surefire-reports/*.xml'
-    }
-    stage('package') {
-        snDevOpsStep ()
-        printBuildinfo {
-        	name = "Packaging...."
+        steps {
+          snDevOpsStep()
+          echo "DevHealthScan only in dev..."
         }
-        withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
-		sh 'mvn package -Dmaven.test.skip=true --batch-mode'
+      }
+
+      //This is a top level stage.  When you setup your pipeline on the SN instance
+      //the stage name 'QADeploy' here needs to match the Orchestration stage field
+      //on the Steps record. you can find the Orchestration stage field by going to
+      //the SN instance, Devops-> App & Pipelines -> Apps, open your app, it's under
+      //the Steps related list.
+      stage('feature/central_config') {
+        //this specifies that this stage will be triggered on event from qa branch
+        when {
+          branch 'qa'
         }
-        //deploy()
+        stages {
+          //under stages, below are the nested child stages for parent stage QADeploy.
+          //DevOps will only see the top level QADeploy stage.  We are grouping
+          //deploy from git, publish to app store and deploy to instance into a single
+          //parent stage for easier visualization on DevOps
+          stage('QADeployFromGit') {
+            steps {
+              snDevOpsStep()
+              echo "QADeployFromGit inside QADeploy only when branch is qa"
+            }
+          }
+
+          stage('QAPublishToAppRepo') {
+            steps {
+              snDevOpsStep()
+              echo "QAPublishToAppRepo inside QADeploy only when branch is qa"
+            }
+          }
+
+          stage('QADeployFromAppRepo') {
+            steps {
+              snDevOpsStep()
+              echo "QADeployFromAppRepo inside QADeploy only when branch is qa"
+            }
+          }
+        }
+      }
+
+      //This is a top level stage.  When you setup your pipeline on the SN instance the stage name 'QAATF' here needs to match the Orchestration stage field on the Steps record. you can find the Orchestration stage field by going to the SN instance, Devops-> App & Pipelines -> Apps, open your app, it's under the Steps related list.
+      stage('dev') {
+        when {
+          branch 'qa'
+        }
+        steps {
+          snDevOpsStep()
+          echo "QAATF inside branch qa..."
+        }
+      }
+
+      //triggers on stage branch
+      stage('master') {
+        when {
+          branch 'stage'
+        }
+        stages {
+          stage('StageDeployFromGit') {
+            steps {
+              snDevOpsStep()
+              echo "StageDeployFromGit inside StageDeploy when branch is stage "
+            }
+          }
+
+          stage('StagePublishToAppRepo') {
+            steps {
+              snDevOpsStep()
+              echo "StagePublishToAppRepo inside StageDeploy when branch is stage "
+            }
+          }
+
+          stage('StageDeployFromAppRepo') {
+            steps {
+              snDevOpsStep()
+              echo "StageDeployFromGit inside StageDeploy when branch is stage "
+            }
+          }
+        }
+      }
+
+      stage('StageATF') {
+        when {
+          branch 'stage'
+        }
+        steps {
+          snDevOpsStep()
+          echo "StageATF i when branch is stage "
+        }
+      }
+
+      //triggers on master branch
+      stage('ProdDeploy') {
+        when {
+          branch 'master'
+        }
+        steps {
+          snDevOpsStep()
+          echo "ProdDeploy when branch is master "
+        }
+      }
     }
-    if (env.BRANCH_NAME == "dev") {   
-    	stage('deploy to dev') {   
-		snDevOpsStep ()
-		printBuildinfo {
-			name = "Docker build...."
-		}
-    	}
-    }
-    if (env.BRANCH_NAME == "master") { 	
-    	stage('deploy to prod') {   
-		snDevOpsStep ()
-		snDevOpsChange()
-		printBuildinfo {
-		     name = "Deploying...."
-		}
-		checkStatus()
-    	}
-    }
-}
+  }
